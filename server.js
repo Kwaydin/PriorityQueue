@@ -1,11 +1,15 @@
 var express = require('express')
-
+var mongoose = require('mongoose');
  
 mongoose.connect('mongodb://0.0.0.0/my_database');
 
 var app = express()
  
-
+var mySchema = new mongoose.Schema({
+  time: String,
+  ID: Number,
+  type: String
+});
 
 
 var myCollection  = mongoose.model('MyTests2', mySchema);
@@ -31,6 +35,8 @@ app.get('/', function (req, res) {
 
   res.send('Hello World'+thor)
 })
+
+
 
 app.get('/ids', function (req, res) {
     res.send('Hello World '+myCollection.find());
@@ -73,7 +79,10 @@ app.delete('/ids/:id', function (req, res) {}) //resort list
 
 
 
+app.get('/ids/dequeue', function(req,res){
+    res.send('asdf dadad');
 
+})
 
 
 
