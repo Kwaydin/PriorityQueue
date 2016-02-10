@@ -7,7 +7,6 @@ var Job = require('../models/job');
 */
 
 exports.getAll = function (req, res) {
-    res.send('Hello World '+Job.find());
     
     Job.find(function (err, collection) {
     if (err) return console.error(err);
