@@ -17,7 +17,7 @@ exports.getAll = function (req, res) {
 //(5) return rank
 exports.getJob = function (req, res) {
     console.log('id '+req.params.id);
-    console.log('time '+req.param.time);
+    console.log('time '+req.param('time');
     
     res.send(analyzeID(req.params.id));
 };
