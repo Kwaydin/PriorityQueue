@@ -1,15 +1,10 @@
 var express = require('express')
-var mongoose = require('mongoose');
+
  
 mongoose.connect('mongodb://0.0.0.0/my_database');
 
 var app = express()
  
-var mySchema = new mongoose.Schema({
-  time: String, 
-  ID: Number, 
-  type: String
-});
 
 
 
@@ -71,7 +66,7 @@ app.put('/ids', function (req, res) {})
 */
 
 //delete all ids
-app.delete('/ids/:id', function (req, res) {}) 
+app.delete('/ids', function (req, res) {}) 
 
 //delete id
 app.delete('/ids/:id', function (req, res) {}) //resort list
