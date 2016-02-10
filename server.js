@@ -9,7 +9,12 @@ mongoose.connect('mongodb://0.0.0.0/my_database');
 var app = express()
  
 
-var router = express.router()
+var router = express.Router();
+
+// Register all our routes with /api
+app.use('/api', router);
+
+
 
 router.route('/jobs')
     .get(jobController.getAll)
@@ -64,4 +69,6 @@ app.get('/ids/:id', function (req, res) {
 app.get('/ids/stats', function (req, res) {})
 
 */
+
+
 app.listen(3030)
