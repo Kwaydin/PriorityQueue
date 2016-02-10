@@ -1,13 +1,15 @@
 var express = require('express')
 var mongoose = require('mongoose');
+
 var jobController = require('./controllers/job');
+
  
 mongoose.connect('mongodb://0.0.0.0/my_database');
 
 var app = express()
  
-var router = express.router()
 
+var router = express.router()
 
 router.route('/jobs')
     .get(jobController.getAll)
@@ -41,6 +43,25 @@ app.get('/', function (req, res) {
   res.send('Hello World'+thor)
 })
 
+
+
+app.get('/ids', function (req, res) {
+    res.send('Hello World '+myCollection.find());
+    
+    myCollection.find(function (err, collection) {
+    if (err) return console.error(err);
+        res.send(""+JSON.stringify(collection));
+    })
+})
+
+//(5) return rank
+app.get('/ids/:id', function (req, res) {
+    console.log(req.params.id);
+    res.send(req.params.id);
+})
+
+//(6) average wait time
+app.get('/ids/stats', function (req, res) {})
 
 */
 app.listen(3030)
