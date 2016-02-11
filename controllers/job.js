@@ -33,7 +33,8 @@ exports.getAll = function (req, res) {
             
             return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
         }).sort(function(a,b){
-            return (a.type) ? 1 : 0; //if at highest priority push it up top!
+            
+            return (a.type+b.type) ? 1 : 0; //if at highest priority push it up top!
         });
         
         res.send(''+JSON.stringify(collection));
