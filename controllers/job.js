@@ -1,4 +1,5 @@
 var Job = require('../models/job');
+var
 
 /*
   time: String, //JSON date
@@ -19,35 +20,10 @@ json.sort(function(a, b){
 
 exports.getAll = function (req, res) {
     
-    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
-        if (err) return console.error(err);
-        
-        now = new Date();
-        
-        
-        collection.sort(function(a,b){
-            aTime = new Date(a.time);
-            bTime = new Date(b.time);
-            aDelta = (now - aTime)/1000;
-            bDelta = (now - bTime)/1000;
-            
-            return priorityTime(a.type,aDelta) - priorityTime(b.type,bDelta);
-            
-        });
-        
-        
-        
-        
-        
-        
-        
-        res.send(""+JSON.stringify(collection));
-    }));
+    
 };
 
-var max = function(a,b){
-  return (a>b) ? a : b;
-};
+
 
 
 
@@ -79,6 +55,51 @@ exports.pushRandomJob = function (req, res) {
 };
 
 
+
+
+
+
+
+/*
+
+//(6) average wait time
+app.get('/ids/stats', function (req, res) {})
+
+
+//enqueue (1) 
+The service should reject work orders with IDs that already exist in the
+queue (I.E. the same user cannot have more than one work order in the
+queue).
+//app.put('/ids/:id?time', function (req, res) {})
+
+//dequeue (2)
+app.put('/ids', function (req, res) {})
+
+//delete all ids
+app.delete('/ids', function (req, res) {}) 
+
+//delete id
+app.delete('/ids/:id', function (req, res) {}) //resort list
+
+
+
+
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+var max = function(a,b){
+  return (a>b) ? a : b;
+};
 
 
 
@@ -124,38 +145,23 @@ var priorityTime = function(type, seconds){
 
 var determineRank = function(submittedDate){
     
-    var now = (submittedDate === undefined) ? Date.now() : submittedDate;
+    var now = (submittedDate === undefined) ? new Date() : submittedDate;
     
-    
-    
+    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+        if (err) return console.error(err);
+        
+        
+        return collection.sort(function(a,b){
+            aTime = new Date(a.time);
+            bTime = new Date(b.time);
+            aDelta = (now - aTime)/1000;
+            bDelta = (now - bTime)/1000;
+            
+            return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
+        }).sort(function(a,b){
+            return (a.type) ? 1 : 0; //if at highest priority push it up top!
+        });
+        
+    }));
     
 };
-
-/*
-
-//(6) average wait time
-app.get('/ids/stats', function (req, res) {})
-
-
-//enqueue (1) 
-The service should reject work orders with IDs that already exist in the
-queue (I.E. the same user cannot have more than one work order in the
-queue).
-//app.put('/ids/:id?time', function (req, res) {})
-
-//dequeue (2)
-app.put('/ids', function (req, res) {})
-
-//delete all ids
-app.delete('/ids', function (req, res) {}) 
-
-//delete id
-app.delete('/ids/:id', function (req, res) {}) //resort list
-
-
-
-
-
-
-
-*/
