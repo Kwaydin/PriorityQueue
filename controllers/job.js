@@ -1,5 +1,10 @@
 var Job = require('../models/job');
 
+/*
+  time: String, //JSON date
+  ID: Number, //The IDs will be integers in the range of 1 to 9223372036854775807.
+  type: Number //There are 4 classes of IDs, normal, priority, VIP, and management override.
+*/
 
 
 /*
@@ -17,15 +22,36 @@ exports.getAll = function (req, res) {
 //(5) return rank
 exports.getJob = function (req, res) {
     console.log('id '+req.params.id);
-    console.log('time '+req.param('time');
+    console.log('time '+req.param('time'));
     
-    res.send(analyzeID(req.params.id));
+    res.send(analyzeID(Number(req.params.id)));
 };
+
+
+exports.pushRandomJob = function (req, res) {
+    
+    // Create a new instance of the Beer model
+    var job = new Job();
+    
+    job.time = req.body.name;
+    job.ID = String(Math.floor(Math.random() * 922337203) + 1);
+    job.type = analyzeID(job.ID);
+
+    // Save the beer and check for errors
+    job.save(function(err) {
+    if (err)
+      res.send(err);
+
+    res.json({ message: 'Great job! ', data: job });
+    });
+};
+
 
 
 
 /*
  You can determine the class of the ID using the following method:
+
 
 (0) IDs that are evenly divisible by both 3 and 5 are management override IDs.
 (1) IDs that are evenly divisible by 5 are VIP IDs.
@@ -34,7 +60,36 @@ exports.getJob = function (req, res) {
 
 */
 var analyzeID = function(id){
-    if(!(id%15)){ //type 4, LCM(3,5)=15
+    var x = Number(id.substr(-2)); //only need last two digits of ID for divisability
+
+    
+    if(!(x%15)){ //class Management Override IDs, LCM(3,5)=15
+        return 0;
+    }else if(!(x%5)){
+        return 1;
+    }else if(!(x%3)){
+        return 2;
+    }else{
+        return 3;   
+    }   
+};
+
+var priorityRank = function(type, seconds){
+    
+    switch(type) {
+    case 2:
+        
+        break;
+    case 3:
+        
+        break;
+    default:
+        
+} 
+            
+    
+    
+    if(!(id%15)){ //class Management Override IDs, LCM(3,5)=15
         return 0;
     }else if(!(id%5)){
         return 1;
@@ -45,7 +100,14 @@ var analyzeID = function(id){
     }   
 };
 
-
+var determineRank = function(submittedDate){
+    
+    var now = (submittedDate === undefined) ? Date.now() : submittedDate;
+    
+    
+    
+    
+};
 
 /*
 
