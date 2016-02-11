@@ -18,8 +18,8 @@ json.sort(function(a, b){
 */
 
 exports.getAll = function (req, res) {
-    
-    var now = (submittedDate === undefined) ? new Date() : submittedDate;
+    var now = new Date();
+    //var now = (submittedDate === undefined) ? new Date() : submittedDate;
     
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
