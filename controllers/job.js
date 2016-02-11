@@ -95,7 +95,7 @@ exports.deleteAll = function(req,res) {
 exports.deleteJob = function(req,res) {
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
-    Job.find({ ID : req.params.id }).remove( callback );
+    Job.find({ ID : req.params.id }).remove( {}, function(err,removed) {});
     res.send("removing ID: " + req.params.id.toString());
 };
 
