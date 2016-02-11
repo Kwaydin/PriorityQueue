@@ -115,6 +115,9 @@ var priorityTime = function(type, seconds){
         case 2:
             return  max(3, seconds*Math.log(seconds));
             break;
+        default: 
+            return seconds;
+            break;
     }
 } 
         
