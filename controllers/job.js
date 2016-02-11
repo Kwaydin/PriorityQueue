@@ -13,7 +13,7 @@ var Job = require('../models/job');
 
 exports.getAll = function (req, res) {
     
-    Job.find(function (err, collection) {
+    Job.find({}, {sort: {time: -1}})(function (err, collection) {
     if (err) return console.error(err);
         res.send(""+JSON.stringify(collection));
     })
@@ -24,7 +24,7 @@ exports.getJob = function (req, res) {
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
     
-    res.send(analyzeID(String(req.params.id)));
+    res.send(analyzeID(req.params.id.toString()));
 };
 
 
@@ -33,7 +33,7 @@ exports.pushRandomJob = function (req, res) {
     // Create a new instance of the Beer model
     var job = new Job();
     
-    job.time = Date.now();
+    job.time = Date.now().toJson();
     job.ID = String(Math.floor(Math.random() * 922337203) + 1);
     job.type = analyzeID(job.ID);
 
