@@ -13,11 +13,11 @@ var Job = require('../models/job');
 
 exports.getAll = function (req, res) {
     
-    Job.find({}, null, {sort: {date: -1}},(function (err, collection) {
+Job.find({}, null, {sort: {date: -1}},(function (err, collection) {
     if (err) return console.error(err);
         res.send(""+JSON.stringify(collection));
     })
-};
+);
 
 //(5) return rank
 exports.getJob = function (req, res) {
