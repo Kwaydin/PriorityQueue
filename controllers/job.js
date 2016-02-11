@@ -18,9 +18,29 @@ json.sort(function(a, b){
 */
 
 exports.getAll = function (req, res) {
-    var response = determineRank();
-    console.log(response);
-    res.send(''+response);
+    
+    var now = (submittedDate === undefined) ? new Date() : submittedDate;
+    
+    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+        if (err) return console.error(err);
+        
+        
+        collection.sort(function(a,b){
+            aTime = new Date(a.time);
+            bTime = new Date(b.time);
+            aDelta = (now - aTime)/1000;
+            bDelta = (now - bTime)/1000;
+            
+            return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
+        }).sort(function(a,b){
+            return (a.type) ? 1 : 0; //if at highest priority push it up top!
+        });
+        
+        res.send(''+JSON.stringify(collection);
+        
+    }));
+    
+    
 };
 
 
@@ -146,9 +166,8 @@ var priorityTime = function(type, seconds){
 var determineRank = function(submittedDate){
     
     var now = (submittedDate === undefined) ? new Date() : submittedDate;
-    var callback;
     
-    return Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
         
         
