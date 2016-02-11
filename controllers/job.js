@@ -36,7 +36,7 @@ exports.getAll = function (req, res) {
             return (a.type) ? 1 : 0; //if at highest priority push it up top!
         });
         
-        res.send(''+JSON.stringify(collection);
+        res.send(''+JSON.stringify(collection));
         
     }));
     
