@@ -24,7 +24,7 @@ exports.getJob = function (req, res) {
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
     
-    res.send(analyzeID(Number(req.params.id)));
+    res.send(analyzeID(String(req.params.id)));
 };
 
 
@@ -33,7 +33,7 @@ exports.pushRandomJob = function (req, res) {
     // Create a new instance of the Beer model
     var job = new Job();
     
-    job.time = req.body.name;
+    job.time = Date.now();
     job.ID = String(Math.floor(Math.random() * 922337203) + 1);
     job.type = analyzeID(job.ID);
 
