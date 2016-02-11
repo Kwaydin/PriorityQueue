@@ -15,7 +15,7 @@ exports.getAll = function (req, res) {
     
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
-        
+        collection=JSON.parse(collection)
         console.log(collection.find({type:0}));
         
         
