@@ -9,13 +9,32 @@ var Job = require('../models/job');
 
 /*
 *GET
+
+
+json.sort(function(a, b){
+    return a.id - b.id;
+});
+
 */
 
 exports.getAll = function (req, res) {
     
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
-        collection=JSON.parse(collection)
+        
+        now = new Date();
+        
+        
+        collection.sort(function(a,b){
+            aTime = new Date(a.time);
+            bTime = new Date(b.time);
+            aDelta = (now - aTime)/1000;
+            bDelta = (now - bTime)/1000;
+            
+            return priorityTime(a.type,aDelta) - priorityTime(b.type,bDelta);
+            
+        });
+        
         console.log(collection.find({type:0}));
         
         
@@ -25,6 +44,12 @@ exports.getAll = function (req, res) {
         res.send(""+JSON.stringify(collection));
     }));
 };
+
+var max = function(a,b){
+  return (a>b) ? a : b;
+};
+
+
 
 //(5) return rank
 exports.getJob = function (req, res) {
@@ -56,6 +81,7 @@ exports.pushRandomJob = function (req, res) {
 
 
 
+
 /*
  You can determine the class of the ID using the following method:
 
@@ -81,31 +107,17 @@ var analyzeID = function(id){
     }   
 };
 
-var priorityRank = function(type, seconds){
-    
+var priorityTime = function(type, seconds){
     switch(type) {
-    case 2:
-        
-        break;
-    case 3:
-        
-        break;
-    default:
-        
+        case 1:
+            return  max(4, 2*seconds*Math.log(seconds));
+            break;
+        case 2:
+            return  max(3, seconds*Math.log(seconds));
+            break;
+    }
 } 
-            
-    
-    
-    if(!(id%15)){ //class Management Override IDs, LCM(3,5)=15
-        return 0;
-    }else if(!(id%5)){
-        return 1;
-    }else if(!(id%3)){
-        return 2;
-    }else{
-        return 3;   
-    }   
-};
+        
 
 var determineRank = function(submittedDate){
     
