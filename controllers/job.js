@@ -31,11 +31,15 @@ exports.getAll = function (req, res) {
             aDelta = (now - aTime)/1000;
             bDelta = (now - bTime)/1000;
             
+            
             return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
-        }).sort(function(a,b){
+        });
+        
+        /*.sort(function(a,b){
             
             return (a.type+b.type) ? 1 : 0; //if at highest priority push it up top!
         });
+        */
         
         res.send(''+JSON.stringify(collection));
         
@@ -45,9 +49,6 @@ exports.getAll = function (req, res) {
 };
 
 
-
-
-
 //(5) return rank
 exports.getJob = function (req, res) {
     console.log('id '+req.params.id);
@@ -55,6 +56,13 @@ exports.getJob = function (req, res) {
     
     res.send(analyzeID(req.params.id.toString()));
 };
+
+
+
+
+
+
+
 
 
 exports.pushRandomJob = function (req, res) {
@@ -77,9 +85,19 @@ exports.pushRandomJob = function (req, res) {
 
 
 
+exports.deleteAll = function(req,res) {
+    Job.remove({}, function(err,removed) {
+        res.send('bye bye db');
+    });
+    
+};
 
-
-
+exports.deleteJob = function(req,res) {
+    console.log('id '+req.params.id);
+    console.log('time '+req.param('time'));
+    Jobs.find({ ID : req.params.id }).remove( callback );
+    res.send("removing ID: " + req.params.id.toString()));
+};
 
 /*
 
