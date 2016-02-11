@@ -146,11 +146,11 @@ var determineRank = function(submittedDate){
     var now = (submittedDate === undefined) ? new Date() : submittedDate;
     var callback;
     
-    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+    return Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
         
         
-        callback = collection.sort(function(a,b){
+        return collection.sort(function(a,b){
             aTime = new Date(a.time);
             bTime = new Date(b.time);
             aDelta = (now - aTime)/1000;
@@ -161,8 +161,5 @@ var determineRank = function(submittedDate){
             return (a.type) ? 1 : 0; //if at highest priority push it up top!
         });
         
-        console.log(''+JSON.stringify(callback));
-        
     }));
-    return callback;
 };
