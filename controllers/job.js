@@ -1,5 +1,4 @@
 var Job = require('../models/job');
-var
 
 /*
   time: String, //JSON date
@@ -19,8 +18,7 @@ json.sort(function(a, b){
 */
 
 exports.getAll = function (req, res) {
-    
-    
+    res.send(determineRank());
 };
 
 
