@@ -35,7 +35,7 @@ exports.getAll = function (req, res) {
             
         });
         
-        console.log(collection.find({type:0}));
+        
         
         
         
