@@ -18,7 +18,9 @@ json.sort(function(a, b){
 */
 
 exports.getAll = function (req, res) {
-    res.send(''+JSON.stringify(determineRank()));
+    var response = determineRank();
+    console.log(response);
+    res.send(''+response);
 };
 
 
