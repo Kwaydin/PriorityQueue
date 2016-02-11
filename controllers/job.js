@@ -33,7 +33,7 @@ exports.pushRandomJob = function (req, res) {
     // Create a new instance of the Beer model
     var job = new Job();
     
-    job.time = Date.now().toJSON();
+    job.time = (new Date).toJSON();
     job.ID = String(Math.floor(Math.random() * 922337203) + 1);
     job.type = analyzeID(job.ID);
 
