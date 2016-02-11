@@ -18,10 +18,11 @@ app.use('/api', router);
 
 router.route('/jobs')
     .get(jobController.getAll)
-//    .delete(jobController.deleteAll)
+    .delete(jobController.deleteAll)
 
 router.route('/jobs/:id')
     .get(jobController.getJob)
+    .delete(jobController.deleteJob)
 /*    .put(jobController.enqueue)
     .delete(jobController.deleteJob)
 */
