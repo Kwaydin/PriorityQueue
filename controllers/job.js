@@ -128,7 +128,7 @@ exports.pushRandomJob = function (req, res) {
         if (err)
           res.send(err);
 
-        res.json({ message: 'Great job! ', data: job });
+        res.json({ message: 'Great job!', data: job });
     });
 };
 
@@ -220,3 +220,18 @@ var priorityTime = function(type, seconds){
             break;
     }
 }; 
+
+ var prioritySort = function(a,b,now){
+     
+     aTime = new Date(a.time);
+     bTime = new Date(b.time);
+    
+     aDelta = (now - aTime)/1000;
+     bDelta = (now - bTime)/1000;
+    
+ 
+     //management override type IDs get ordered first
+     if((a.type && b.type) || (a.type == b.type) )
+         return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
+     else return (a.type) ? 1 : -1;
+};
