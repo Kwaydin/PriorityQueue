@@ -1,10 +1,11 @@
-var Job = require('../models/job');
+//author: Ryan McP
+
 /*
   time: String, //JSON date
   ID: Number, //The IDs will be integers in the range of 1 to 9223372036854775807.
   type: Number //There are 4 classes of IDs, normal, priority, VIP, and management override.
 */
-
+var Job = require('../models/job');
 
 
 //(3) returns list of all jobs priority ranked
@@ -150,6 +151,7 @@ exports.deleteJob = function(req,res) {
 };
 
 
+//(6) average wait time
 exports.averageWait = function(req,res) {
     var now = new Date();
     var sumDelta = 0;
@@ -164,19 +166,10 @@ exports.averageWait = function(req,res) {
             sumDelta+= now - collection[i].time;
         }
         
-        
-
         res.json({message : 'wait time', average: sumDelta/collection.length+1 });
-                
     }));
     
 };
-
-
-/*
-
-//(6) average wait time
-app.get('/ids/stats', function (req, res) {})
 
 
 
@@ -184,14 +177,9 @@ app.get('/ids/stats', function (req, res) {})
 
 //HELPER FUNCTIONS
 
-
-
-
-
 var max = function(a,b){
   return (a>b) ? a : b;
 };
-
 
 
 /*
@@ -231,47 +219,4 @@ var priorityTime = function(type, seconds){
             return seconds;
             break;
     }
-} 
-        
-
-var determineRank = function(submittedDate){
-    
-    var now = (submittedDate === undefined) ? new Date() : submittedDate;
-    
-    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
-        if (err) return console.error(err);
-        
-        
-        collection.sort(function(a,b){
-            aTime = new Date(a.time);
-            bTime = new Date(b.time);
-            aDelta = (now - aTime)/1000;
-            bDelta = (now - bTime)/1000;
-            
-            //management override type IDs get ordered first
-            if((a.type && b.type) || (a.type == b.type) )
-                return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
-            else return (a.type) ? 1 : -1;
-            
-            });
-        
-        console.log(JSON.stringify(collection));
-            
-            
-    }));
-    
-};
-
-var average = function(a,now){
-    
-    aTime = new Date(a.time);
-    
-    aDelta = (now - aTime)/1000;
-    
-
-    //management override type IDs get ordered first
-    if((a.type && b.type) || (a.type == b.type) )
-        return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
-    else return (a.type) ? 1 : -1;
-};
-
+}; 

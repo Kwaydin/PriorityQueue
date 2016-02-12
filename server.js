@@ -1,3 +1,5 @@
+//author: Ryan McP
+
 var express = require('express')
 var mongoose = require('mongoose');
 
@@ -28,6 +30,9 @@ router.route('/jobs/:id')
 
 router.route('/pushRandomJob')
     .get(jobController.pushRandomJob)
+
+router.route('/wait')
+    .get(jobController.averageWait)
 
 
 
