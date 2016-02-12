@@ -55,7 +55,7 @@ exports.getJob = function (req, res) {
             }
         }
         
-        res.json({ message: 'job order: ', rank: rank, data: collection[rank]});
+        res.json({ message: 'job order: ', rank: rank, id: collection[rank].id, time : collection[rank].time, data : collection[rank]});
         
     }));
 };
@@ -164,9 +164,10 @@ exports.averageWait = function(req,res) {
         for(var i = 0; i < collection.length; i++)
         {
             sumDelta+= now - collection[i].time;
+            console.log(sumDelta);
         }
         
-        res.json({message : 'wait time', average: sumDelta/collection.length+1 });
+        res.json({message : 'wait time', average: sumDelta/collection.length });
     }));
     
 };
