@@ -55,7 +55,7 @@ exports.getJob = function (req, res) {
             }
         }
         
-        res.json({ message: 'job order: ', rank: rank, id: collection[rank].id, time : collection[rank].time, data : collection[rank]});
+        res.json({ message: 'job order: ', rank: rank, ID: collection[rank].ID, time : collection[rank].time, data : collection[rank]});
         
     }));
 };
@@ -107,7 +107,7 @@ exports.dequeue = function(req, res) {
             }
         }
         
-        res.json({ message: 'priority job request: ', ID: collection[0].id, time: collection[0].time, data: collection[0]});
+        res.json({ message: 'priority job request: ', ID: collection[0].ID, time: collection[0].time, data: collection[0]});
         
     }));
 };
