@@ -1,5 +1,4 @@
 var Job = require('../models/job');
-
 /*
   time: String, //JSON date
   ID: Number, //The IDs will be integers in the range of 1 to 9223372036854775807.
@@ -7,16 +6,8 @@ var Job = require('../models/job');
 */
 
 
-/*
-*GET
 
-
-json.sort(function(a, b){
-    return a.id - b.id;
-});
-
-*/
-
+//(3) returns list of all jobs priority ranked
 exports.getAll = function (req, res) {
     var now = new Date();
     //var now = (submittedDate === undefined) ? new Date() : submittedDate;
@@ -29,8 +20,6 @@ exports.getAll = function (req, res) {
         collection.sort(function(a,b){
             return prioritySort(a,b,now);
         });
-        
-        console.log('get all' +JSON.stringify(collection));
 
         
         /*.sort(function(a,b){
@@ -40,7 +29,6 @@ exports.getAll = function (req, res) {
         */
         res.json({ message: 'Great job! ', data: collection });
         
-        //res.send(''+JSON.stringify(collection));
         
     }));
     
@@ -75,9 +63,6 @@ exports.getJob = function (req, res) {
             }
         }
         
-        console.log('get 1' +JSON.stringify(collection));
-
-        
         res.json({ message: 'Great job! ', rank: rank, data: collection[rank]});
         
     }));
@@ -93,27 +78,35 @@ exports.putJob = function (req, res) {
     
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
-    
-    
-    
-    res.send(analyzeID(req.params.id.toString()));
+    Job.find({ ID : id}, (function (err, collection){
+        if (err) return res.send(err);
+        
+        if(collection.empty)
+        {
+            var job = new Job({ID : id, time : time, type : analyzeID(id)});
+            job.save(function(err) {
+                if (err)
+                  res.send(err);
+
+                res.json({ message: 'Great job! ', data: job });
+            });
+        }
+        else res.send('ID exists already');
+    }));
 };
-
-
-
 
 
 
 exports.pushRandomJob = function (req, res) {
     
-    // Create a new instance of the Beer model
+    // Create a new instance of the Job model
     var job = new Job();
     
     job.time = (new Date).toJSON();
     job.ID = String(Math.floor(Math.random() * 922337203) + 1);
     job.type = analyzeID(job.ID);
 
-    // Save the beer and check for errors
+    // Save the job and check for errors
     job.save(function(err) {
         if (err)
           res.send(err);
@@ -131,6 +124,8 @@ exports.deleteAll = function(req,res) {
     
 };
 
+
+//(4) remove Job using ID 
 exports.deleteJob = function(req,res) {
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
