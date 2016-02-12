@@ -20,6 +20,7 @@ json.sort(function(a, b){
 exports.getAll = function (req, res) {
     var now = new Date();
     //var now = (submittedDate === undefined) ? new Date() : submittedDate;
+    determineRank(now);
     
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
@@ -190,16 +191,20 @@ var determineRank = function(submittedDate){
         if (err) return console.error(err);
         
         
-        return collection.sort(function(a,b){
+        collection.sort(function(a,b){
             aTime = new Date(a.time);
             bTime = new Date(b.time);
             aDelta = (now - aTime)/1000;
             bDelta = (now - bTime)/1000;
             
-            return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
-        }).sort(function(a,b){
-            return (a.type) ? 1 : 0; //if at highest priority push it up top!
-        });
-        
+            //management override type IDs get ordered first
+            if((a.type && b.type) || (a.type == b.type) )
+                return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
+            else return (a.type) ? 1 : -1;
+            
+            });
+        console.log(collection);
+            
+            
     }));
 };
