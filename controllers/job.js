@@ -30,6 +30,8 @@ exports.getAll = function (req, res) {
             return prioritySort(a,b,now);
         });
         
+        
+        
         /*.sort(function(a,b){
             
             return (a.type+b.type) ? 1 : 0; //if at highest priority push it up top!
@@ -49,23 +51,32 @@ exports.getAll = function (req, res) {
 exports.getJob = function (req, res) {
     var id = req.params.id;
     var time = new Date(req.param('time'));
+    var rank = -1;
     
     time = (time === undefined) ? new Date() : time; //Job if no time given use 'now'
     
-    console.log('id '+req.params.id);
-    console.log('time '+req.param('time'));
+    console.log('id '+req.body.id);
+    console.log('time '+req.body.time);
     
     
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
-        if (err) return console.error(err);
+        if (err) return res.send(err);
         
         collection.sort(function(a,b){
             return prioritySort(a,b);
         });
         
+        for(int i = 0; i < collection.length; i++)
+        {
+            if(collection[i].ID == id)
+            {
+                   rank=i;
+            }
+        }
+        
         console.log(collection);
         
-        res.json({ message: 'Great job! ', rank: collection.length, data: collection[0]});
+        res.json({ message: 'Great job! ', rank: rank, data: collection[0]});
         
     }));
 };
