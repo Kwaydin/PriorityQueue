@@ -70,7 +70,7 @@ exports.getJob = function (req, res) {
 
 
 //(1) enqueue
-exports.putJob = function (req, res) {
+exports.enqueue = function (req, res) {
     var id = req.params.id;
     var time = req.param('time');
     
