@@ -81,7 +81,7 @@ exports.enqueue = function (req, res) {
     Job.find({ ID : id}, (function (err, collection){
         if (err) return res.send(err);
         
-        if(collection.empty)
+        if(!collection.length)
         {
             var job = new Job({ID : id, time : time, type : analyzeID(id)});
             job.save(function(err) {
