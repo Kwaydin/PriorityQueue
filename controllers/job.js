@@ -203,7 +203,7 @@ var determineRank = function(submittedDate){
             else return (a.type) ? 1 : -1;
             
             });
-        console.log(collection);
+        console.log(JSON.stringify(collection));
             
             
     }));
