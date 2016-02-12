@@ -47,14 +47,44 @@ exports.getAll = function (req, res) {
 
 //(5) return rank
 exports.getJob = function (req, res) {
+    var id = req.params.id;
+    var time = new Date(req.param('time'));
+    
+    time = (time === undefined) ? new Date() : time; //Job if no time given use 'now'
+    
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
     
-    res.send(analyzeID(req.params.id.toString()));
+    
+    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+        if (err) return console.error(err);
+        
+        collection.sort(function(a,b){
+            return prioritySort(a,b,now);
+        });
+        
+        console.log(collection);
+        
+        res.json({ message: 'Great job! ', data: collection[0]});
+        
+    }));
 };
 
 
-
+//(1) enqueue
+exports.putJob = function (req, res) {
+    var id = req.params.id;
+    var time = req.param('time');
+    
+    time = (time === undefined) ? new Date() : time; //Job is inserted 'now' if no time given
+    
+    console.log('id '+req.params.id);
+    console.log('time '+req.param('time'));
+    
+    
+    
+    res.send(analyzeID(req.params.id.toString()));
+};
 
 
 
@@ -198,9 +228,7 @@ var determineRank = function(submittedDate){
             else return (a.type) ? 1 : -1;
             
             });
-        delete collection.type;
-        delete collection._id;
-        delete collection.__v;
+        
         console.log(JSON.stringify(collection));
             
             
