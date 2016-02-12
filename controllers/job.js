@@ -60,12 +60,12 @@ exports.getJob = function (req, res) {
         if (err) return console.error(err);
         
         collection.sort(function(a,b){
-            return prioritySort(a,b,now);
+            return prioritySort(a,b);
         });
         
         console.log(collection);
         
-        res.json({ message: 'Great job! ', data: collection[0]});
+        res.json({ message: 'Great job! ', rank: collection.length, data: collection[0]});
         
     }));
 };
