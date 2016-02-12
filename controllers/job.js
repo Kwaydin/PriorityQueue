@@ -55,8 +55,8 @@ exports.getJob = function (req, res) {
     
     time = (time === undefined) ? new Date() : time; //Job if no time given use 'now'
     
-    console.log('id '+req.body.id);
-    console.log('time '+req.body.time);
+    console.log('id '+req.params.id);
+    console.log('time '+time);
     
     
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
