@@ -35,8 +35,9 @@ exports.getAll = function (req, res) {
             return (a.type+b.type) ? 1 : 0; //if at highest priority push it up top!
         });
         */
+        res.json({ message: 'Great job! ', data: collection });
         
-        res.send(''+JSON.stringify(collection));
+        //res.send(''+JSON.stringify(collection));
         
     }));
     
@@ -71,10 +72,10 @@ exports.pushRandomJob = function (req, res) {
 
     // Save the beer and check for errors
     job.save(function(err) {
-    if (err)
-      res.send(err);
+        if (err)
+          res.send(err);
 
-    res.json({ message: 'Great job! ', data: job });
+        res.json({ message: 'Great job! ', data: job });
     });
 };
 
@@ -197,6 +198,9 @@ var determineRank = function(submittedDate){
             else return (a.type) ? 1 : -1;
             
             });
+        delete collection.type;
+        delete collection._id;
+        delete collection.__v;
         console.log(JSON.stringify(collection));
             
             
