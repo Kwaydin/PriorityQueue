@@ -26,7 +26,7 @@ exports.getAll = function (req, res) {
         if (err) return console.error(err);
         
         
-        collection.sort(prioritySort);
+        collection.sort(prioritySort(now));
         
         /*.sort(function(a,b){
             
@@ -202,7 +202,8 @@ var determineRank = function(submittedDate){
     
 };
 
-var prioritySort = (function(a,b){
+var prioritySort = function(a,b,now){
+    
     aTime = new Date(a.time);
     bTime = new Date(b.time);
     aDelta = (now - aTime)/1000;
@@ -212,4 +213,4 @@ var prioritySort = (function(a,b){
     if((a.type && b.type) || (a.type == b.type) )
         return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
     else return (a.type) ? 1 : -1;
-});
+};
