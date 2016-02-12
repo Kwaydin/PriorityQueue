@@ -26,7 +26,9 @@ exports.getAll = function (req, res) {
         if (err) return console.error(err);
         
         
-        collection.sort(prioritySort(now));
+        collection.sort(function(a,b){
+            return prioritySort(a,b,now);
+        });
         
         /*.sort(function(a,b){
             
