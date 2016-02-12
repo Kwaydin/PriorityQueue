@@ -74,7 +74,7 @@ exports.getJob = function (req, res) {
             }
         }
         
-        console.log(JSON.stringify(collection.ID));
+        console.log(JSON.stringify(collection[].ID));
         
         res.json({ message: 'Great job! ', rank: rank, data: collection[0]});
         
