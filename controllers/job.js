@@ -63,7 +63,7 @@ exports.getJob = function (req, res) {
         if (err) return res.send(err);
         
         collection=collection.sort(function(a,b){
-            return prioritySort(a,b);
+            return prioritySort(a,b,time);
         });
         
         for(var i = 0; i < collection.length; i++)
