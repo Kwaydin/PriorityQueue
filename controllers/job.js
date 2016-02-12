@@ -30,7 +30,8 @@ exports.getAll = function (req, res) {
             return prioritySort(a,b,now);
         });
         
-        
+        console.log('get all' +JSON.stringify(collection));
+
         
         /*.sort(function(a,b){
             
@@ -53,7 +54,7 @@ exports.getJob = function (req, res) {
     var time = new Date(req.param('time'));
     var rank = -1;
     
-    time = (time === undefined) ? new Date() : time; //Job if no time given use 'now'
+    time = (time) ? new Date() : time; //Job if no time given use 'now'
     
     console.log('id '+req.params.id);
     console.log('time '+time);
@@ -62,7 +63,7 @@ exports.getJob = function (req, res) {
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return res.send(err);
         
-        collection=collection.sort(function(a,b){
+        collection.sort(function(a,b){
             return prioritySort(a,b,time);
         });
         
@@ -74,9 +75,10 @@ exports.getJob = function (req, res) {
             }
         }
         
-        console.log(JSON.stringify(collection));
+        console.log('get 1' +JSON.stringify(collection));
+
         
-        res.json({ message: 'Great job! ', rank: rank, data: collection[0]});
+        res.json({ message: 'Great job! ', rank: rank, data: collection[rank]});
         
     }));
 };
