@@ -23,10 +23,7 @@ router.route('/jobs')
 router.route('/jobs/:id')
     .get(jobController.getJob)
     .delete(jobController.deleteJob)
-/*    .put(jobController.enqueue)
-    .delete(jobController.deleteJob)
-*/
-
+    .put(jobController.enqueue)
 
 router.route('/pushRandomJob')
     .get(jobController.pushRandomJob)
