@@ -66,7 +66,7 @@ exports.getJob = function (req, res) {
             return prioritySort(a,b);
         });
         
-        for(int i = 0; i < collection.length; i++)
+        for(var i = 0; i < collection.length; i++)
         {
             if(collection[i].ID == id)
             {
@@ -74,7 +74,7 @@ exports.getJob = function (req, res) {
             }
         }
         
-        console.log(collection);
+        console.log(JSON.stringify(collection.ID));
         
         res.json({ message: 'Great job! ', rank: rank, data: collection[0]});
         
