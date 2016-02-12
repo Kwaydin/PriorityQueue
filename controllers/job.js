@@ -62,7 +62,7 @@ exports.getJob = function (req, res) {
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return res.send(err);
         
-        collection.sort(function(a,b){
+        collection=collection.sort(function(a,b){
             return prioritySort(a,b);
         });
         
