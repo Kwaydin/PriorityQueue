@@ -159,7 +159,7 @@ exports.averageWait = function(req,res) {
     Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
         if (err) return console.error(err);
         
-        for(int i = 0; i < collection.length; i++)
+        for(var i = 0; i < collection.length; i++)
         {
             sumDelta+= now - collection[i].time;
         }
