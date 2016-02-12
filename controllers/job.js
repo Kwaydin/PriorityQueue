@@ -22,7 +22,7 @@ exports.getAll = function (req, res) {
             return prioritySort(a,b,now);
         });
 
-        res.json({ data: collection });
+        res.json( collection );
                 
     }));
 };
