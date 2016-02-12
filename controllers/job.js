@@ -21,18 +21,9 @@ exports.getAll = function (req, res) {
             return prioritySort(a,b,now);
         });
 
-        
-        /*.sort(function(a,b){
-            
-            return (a.type+b.type) ? 1 : 0; //if at highest priority push it up top!
-        });
-        */
-        res.json({ message: 'Great job! ', data: collection });
-        
-        
+        res.json({ data: collection });
+                
     }));
-    
-    
 };
 
 
@@ -63,7 +54,7 @@ exports.getJob = function (req, res) {
             }
         }
         
-        res.json({ message: 'Great job! ', rank: rank, data: collection[rank]});
+        res.json({ message: 'job order: ', rank: rank, data: collection[rank]});
         
     }));
 };
@@ -74,7 +65,7 @@ exports.enqueue = function (req, res) {
     var id = req.params.id;
     var time = req.param('time');
     
-    time = (time === undefined) ? new Date() : time; //Job is inserted 'now' if no time given
+    time = (time) ? new Date() : time; //Job is inserted 'now' if no time given
     
     console.log('id '+req.params.id);
     console.log('time '+req.param('time'));
@@ -83,20 +74,45 @@ exports.enqueue = function (req, res) {
         
         if(!collection.length)
         {
-            var job = new Job({ID : id, time : time, type : analyzeID(id)});
+            var job = new Job({type : analyzeID(id), ID : id, time : time, });
             job.save(function(err) {
                 if (err)
                   res.send(err);
 
-                res.json({ message: 'Great job! ', data: job });
+                res.json({ message: 'Successfully Added Job! ', data: job }); //Great Job!
             });
         }
-        else res.send('ID exists already');
+        else res.json({message: 'ID already exists.'});
     }));
 };
 
 
+//(2) dequeue
+exports.dequeue = function(req, res) {
+    var now = new Date();
+    
+    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+        if (err) return res.send(err);
+        
+        collection.sort(function(a,b){
+            return prioritySort(a,b,now);
+        });
+        
+        for(var i = 0; i < collection.length; i++)
+        {
+            if(collection[i].ID == id)
+            {
+                   rank=i;
+            }
+        }
+        
+        res.json({ message: 'priority job request: ', ID: collection[0].id, time: collection[0].time, data: collection[0]});
+        
+    }));
+};
 
+
+//used for testing
 exports.pushRandomJob = function (req, res) {
     
     // Create a new instance of the Job model
@@ -116,10 +132,10 @@ exports.pushRandomJob = function (req, res) {
 };
 
 
-
+//delete all jobs from db
 exports.deleteAll = function(req,res) {
     Job.remove({}, function(err,removed) {
-        res.send('bye bye db');
+        res.json({message : 'bye bye db'});
     });
     
 };
@@ -133,38 +149,40 @@ exports.deleteJob = function(req,res) {
     res.send("removing ID: " + req.params.id.toString());
 };
 
+
+exports.averageWait = function(req,res) {
+    var now = new Date();
+    var sumDelta = 0;
+    //var now = (submittedDate === undefined) ? new Date() : submittedDate;
+    
+    
+    Job.find({}, null, {sort: {date: 1}},(function (err, collection) {
+        if (err) return console.error(err);
+        
+        for(int i = 0; i < collection.length; i++)
+        {
+            sumDelta+= now - collection[i].time;
+        }
+        
+        
+
+        res.json({message : 'wait time', average: sumDelta/collection.length+1 });
+                
+    }));
+    
+};
+
+
 /*
 
 //(6) average wait time
 app.get('/ids/stats', function (req, res) {})
 
 
-//enqueue (1) 
-The service should reject work orders with IDs that already exist in the
-queue (I.E. the same user cannot have more than one work order in the
-queue).
-//app.put('/ids/:id?time', function (req, res) {})
-
-//dequeue (2)
-app.put('/ids', function (req, res) {})
-
-//delete all ids
-app.delete('/ids', function (req, res) {}) 
-
-//delete id
-app.delete('/ids/:id', function (req, res) {}) //resort list
 
 
 
-
-
-
-
-*/
-
-
-
-
+//HELPER FUNCTIONS
 
 
 
@@ -244,15 +262,16 @@ var determineRank = function(submittedDate){
     
 };
 
-var prioritySort = function(a,b,now){
+var average = function(a,now){
     
     aTime = new Date(a.time);
-    bTime = new Date(b.time);
+    
     aDelta = (now - aTime)/1000;
-    bDelta = (now - bTime)/1000;
+    
 
     //management override type IDs get ordered first
     if((a.type && b.type) || (a.type == b.type) )
         return  priorityTime(b.type,bDelta) - priorityTime(a.type,aDelta);
     else return (a.type) ? 1 : -1;
 };
+
