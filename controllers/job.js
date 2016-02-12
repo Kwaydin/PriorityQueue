@@ -163,11 +163,11 @@ exports.averageWait = function(req,res) {
         
         for(var i = 0; i < collection.length; i++)
         {
-            sumDelta+= now - collection[i].time;
-            console.log(sumDelta);
+            sumDelta+= (now - collection[i].time);
+            
         }
         
-        res.json({message : 'wait time', average: sumDelta/collection.length });
+        res.json({message : 'average wait time', seconds: (sumDelta/collection.length/1000)});
     }));
     
 };
